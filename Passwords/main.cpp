@@ -1,47 +1,47 @@
-#include <array>
-#include <iostream>
+#include <cctype>
 #include <ncurses.h>
-#include <string>
-#include <string_view>
+
+#include "Answer.hpp"
+#include "UserInput.hpp"
 
 const char *help{"passwords <COLUMN1> <COLUMN2> <COLUMN3> <COLUMN4> <COLUMN5>"};
 
-const std::array<std::string_view, 35> passwords{
-    "about", "after", "again", "below", "could", "every", "first",
-    "found", "great", "house", "large", "learn", "never", "other",
-    "place", "plant", "point", "right", "small", "sound", "spell",
-    "still", "study", "their", "there", "these", "thing", "think",
-    "three", "water", "where", "which", "world", "would", "write"};
-
-bool isPassword(std::string_view str) {
-  for (std::string_view strs : passwords) {
-    if (str == strs) {
-      return true;
-    }
-  }
-  return false;
-}
-
 int main(int argc, char *argv[]) {
-  if (argc != 6) {
-    std::cerr << help << std::endl;
+  initscr();
+  noecho();
+  if (has_colors() == FALSE) {
+    endwin();
+    printf("Your terminal does not support color\n");
     return 1;
   }
-  for (char c1 : std::string{argv[1]}) {
-    for (char c2 : std::string{argv[2]}) {
-      for (char c3 : std::string{argv[3]}) {
-        for (char c4 : std::string{argv[4]}) {
-          for (char c5 : std::string{argv[5]}) {
-            std::string s{c1, c2, c3, c4, c5};
-            if (isPassword(s)) {
-              std::cout << s << std::endl;
-              return 0;
-            }
-          }
-        }
-      }
+  start_color();
+
+  use_default_colors();
+  init_pair(COLOR_WRONG, COLOR_RED, -1);
+  init_pair(COLOR_CORRECT, COLOR_CORRECT, -1);
+  init_color(COLOR_BLACK, 412, 412, 412);
+  init_pair(COLOR_IMPOSSIBLE, COLOR_BLACK, -1);
+
+  char input;
+  UserInput user{argc, argv};
+
+  drawFrame(user);
+  do {
+    input = getch();
+    if (input == 'j') {
+      user.moveCurser(0, 1);
+    } else if (input == 'k') {
+      user.moveCurser(0, -1);
+    } else if (input == 'l') {
+      user.moveCurser(1, 0);
+    } else if (input == 'h') {
+      user.moveCurser(-1, 0);
+    } else if (input == 'r') {
+      user.setChar(getch());
+    } else if (input == 'd') {
+      user.delChar();
     }
-  }
-  std::cerr << "no password found" << std::endl;
-  return 1;
+  } while (input != 'q');
+  endwin();
+  return 0;
 }

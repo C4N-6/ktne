@@ -1,11 +1,17 @@
-CXXFLAGS += $(shell pkg-config --cflags ncurses)
+CXXFLAGS += -std=c++20 $(shell pkg-config --cflags ncurses)
 LDFLAGS  += $(shell pkg-config --libs ncurses)
 
-all: passwords/passwords
+out ?= /usr/local
+BINDIR = $(out)/bin
 
-passwords/passwords: passwords/main.cpp
+all: out/passwords
+
+out/passwords: passwords/main.cpp
 	@mkdir -p out
-	g++ $(CXXFLAGS) passwords/main.cpp $(LDFLAGS) -o out/passwords
+	$(CXX) $(CXXFLAGS) passwords/main.cpp passwords/Answer.cpp passwords/UserInput.cpp $(LDFLAGS) -o out/passwords
+
+install: out/passwords
+	install -D out/passwords $(BINDIR)/passwords
 
 .PHONY: clean
 clean:
