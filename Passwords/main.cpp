@@ -1,5 +1,6 @@
 #include <array>
 #include <iostream>
+#include <ncurses.h>
 #include <string>
 #include <string_view>
 
@@ -15,7 +16,6 @@ const std::array<std::string_view, 35> passwords{
 bool isPassword(std::string_view str) {
   for (std::string_view strs : passwords) {
     if (str == strs) {
-      std::cerr << help << std::endl;
       return true;
     }
   }
@@ -24,6 +24,7 @@ bool isPassword(std::string_view str) {
 
 int main(int argc, char *argv[]) {
   if (argc != 6) {
+    std::cerr << help << std::endl;
     return 1;
   }
   for (char c1 : std::string{argv[1]}) {
