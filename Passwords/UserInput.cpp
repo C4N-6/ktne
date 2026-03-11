@@ -1,5 +1,8 @@
 #include "UserInput.hpp"
 #include "Answer.hpp"
+#include <algorithm>
+#include <array>
+#include <cstddef>
 #include <ncurses.h>
 #include <utility>
 std::array<Answer, NUMBER_OF_WORDS> UserInput::getAnswer() const {
@@ -62,6 +65,8 @@ void drawFrame(const UserInput &userInput) {
     printw("\n");
   }
 
+  int optimalCol = userInput.findOptimalColumToFill();
+
   padding = (cols - 5 * (1 + NUMBER_OF_SPACES_BETWEEN_INPUT_CHARS)) / 2;
 
   for (int i = 0; i < 6; i++) {
@@ -73,7 +78,13 @@ void drawFrame(const UserInput &userInput) {
       if (c == '\0') {
         c = EMPTY_CHAR;
       }
+      if (j == optimalCol) {
+        attron(COLOR_PAIR(COLOR_OPTIMAL_COL));
+      }
       printw("%c", c);
+      if (j == optimalCol) {
+        attroff(COLOR_PAIR(COLOR_OPTIMAL_COL));
+      }
       if (j != 4) {
         for (int k = 0; k < NUMBER_OF_SPACES_BETWEEN_INPUT_CHARS; k++) {
           printw(" ");
@@ -90,4 +101,57 @@ void drawFrame(const UserInput &userInput) {
            (p.y + 1) * NUMBER_OF_NEWLINES_BETWEEN_INPUT_CHARS,
        padding + p.x * (1 + NUMBER_OF_SPACES_BETWEEN_INPUT_CHARS));
   refresh();
+}
+
+void UserInput::moveCurser(int dx, int dy) {
+  int temp = m_curserPos.x + dx;
+  if (temp >= 0 && temp < 5) {
+    m_curserPos.x += dx;
+  }
+  temp = m_curserPos.y + dy;
+  if (temp >= 0 && temp < 6) {
+    m_curserPos.y += dy;
+  }
+
+  int rows, cols;
+  getmaxyx(stdscr, rows, cols);
+
+  move((NUMBER_OF_WORDS / (cols / (5 + NUMBER_OF_SPACES_BETWEEN_WORDS))) *
+               NUMBER_OF_NEWLINES_BETWEEN_WORDS +
+           (m_curserPos.y + 1) * NUMBER_OF_NEWLINES_BETWEEN_INPUT_CHARS,
+       ((cols - 5 * (1 + NUMBER_OF_SPACES_BETWEEN_INPUT_CHARS)) / 2) +
+           m_curserPos.x * (1 + NUMBER_OF_SPACES_BETWEEN_INPUT_CHARS));
+}
+
+int UserInput::findOptimalColumToFill() const {
+  std::array<std::array<int, 26>, 5> characterDensity{};
+
+  std::array<Answer, NUMBER_OF_WORDS> ans = getAnswer();
+
+  for (int i{0}; i < characterDensity.size(); i++) {
+    for (int j{0}; j < passwords.size(); j++) {
+      characterDensity[i].at(passwords.at(j).at(i) - 97)++;
+    }
+  }
+
+  std::array<std::pair<int, size_t>, 5> maxCharDensity =
+      [&characterDensity]<size_t... i>(std::index_sequence<i...>) {
+        return std::array<std::pair<int, size_t>, 5>{std::pair<int, size_t>{
+            *std::max_element(characterDensity.at(i).begin(),
+                              characterDensity.at(i).end()),
+            i}...};
+      }(std::make_index_sequence<5>());
+
+  std::sort(maxCharDensity.begin(), maxCharDensity.end(),
+            [](std::pair<int, size_t> a, std::pair<int, size_t> b) {
+              return a.first > b.first;
+            });
+
+  for (int i{0}; i < maxCharDensity.size(); i++) {
+    if (!isColumFilled(maxCharDensity[i].second)) {
+      return maxCharDensity[i].second;
+    }
+  }
+
+  return -1;
 }

@@ -42,25 +42,7 @@ public:
     }
   }
 
-  void moveCurser(int dx, int dy) {
-    int temp = m_curserPos.x + dx;
-    if (temp >= 0 && temp < 5) {
-      m_curserPos.x += dx;
-    }
-    temp = m_curserPos.y + dy;
-    if (temp >= 0 && temp < 6) {
-      m_curserPos.y += dy;
-    }
-
-    int rows, cols;
-    getmaxyx(stdscr, rows, cols);
-
-    move((NUMBER_OF_WORDS / (cols / (5 + NUMBER_OF_SPACES_BETWEEN_WORDS))) *
-                 NUMBER_OF_NEWLINES_BETWEEN_WORDS +
-             (m_curserPos.y + 1) * NUMBER_OF_NEWLINES_BETWEEN_INPUT_CHARS,
-         ((cols - 5 * (1 + NUMBER_OF_SPACES_BETWEEN_INPUT_CHARS)) / 2) +
-             m_curserPos.x * (1 + NUMBER_OF_SPACES_BETWEEN_INPUT_CHARS));
-  }
+  void moveCurser(int dx, int dy);
   void setChar(char c) {
     c = std::tolower(c);
     if (std::isalpha(c)) {
@@ -76,4 +58,13 @@ public:
   char getCharAt(int x, int y) const { return m_input.at(x).at(y); }
   const Point &getCurserPosition() const { return m_curserPos; }
   std::array<Answer, NUMBER_OF_WORDS> getAnswer() const;
+  int findOptimalColumToFill() const;
+  bool isColumFilled(int x) const {
+    for (int i = 0; i < m_input.at(x).size(); i++) {
+      if (m_input[x].at(i) == '\0') {
+        return false;
+      }
+    }
+    return true;
+  }
 };

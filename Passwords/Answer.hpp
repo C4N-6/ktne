@@ -6,6 +6,7 @@
 #define COLOR_WRONG 1
 #define COLOR_CORRECT 2
 #define COLOR_IMPOSSIBLE 3
+#define COLOR_OPTIMAL_COL 4
 
 class UserInput;
 

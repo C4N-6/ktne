@@ -19,10 +19,12 @@ int main(int argc, char *argv[]) {
   use_default_colors();
   init_pair(COLOR_WRONG, COLOR_RED, -1);
   init_pair(COLOR_CORRECT, COLOR_CORRECT, -1);
+  init_color(COLOR_YELLOW, 420, 557, 137);
+  init_pair(COLOR_OPTIMAL_COL, -1, COLOR_YELLOW);
   init_color(COLOR_BLACK, 412, 412, 412);
   init_pair(COLOR_IMPOSSIBLE, COLOR_BLACK, -1);
 
-  char input;
+  int input;
   UserInput user{argc, argv};
 
   drawFrame(user);
@@ -40,6 +42,8 @@ int main(int argc, char *argv[]) {
       user.setChar(getch());
     } else if (input == 'd') {
       user.delChar();
+    } else if (input == KEY_RESIZE) {
+      drawFrame(user);
     }
   } while (input != 'q');
   endwin();
