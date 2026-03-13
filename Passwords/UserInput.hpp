@@ -44,8 +44,8 @@ public:
 
   void moveCurser(int dx, int dy);
   void setChar(char c) {
-    c = std::tolower(c);
-    if (std::isalpha(c)) {
+    c = tolower(c);
+    if (isalpha(c)) {
       m_input.at(m_curserPos.x).at(m_curserPos.y) = c;
       drawFrame(*this);
     }
