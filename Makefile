@@ -15,7 +15,7 @@ out/obj/passwords/%.o: Passwords/%.cpp
 	@mkdir -p out/obj/passwords
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-out/mazes: out/obj/mazes/main.o
+out/mazes: out/obj/mazes/main.o out/obj/mazes/maze.o out/obj/mazes/input.o out/obj/mazes/display.o
 	@mkdir -p out
 	$(CC) $^ $(LDFLAGS) -o $@
 
@@ -29,4 +29,4 @@ install: all
 
 .PHONY: clean install
 clean:
-	rm -rf out/passwords
+	rm -rf out

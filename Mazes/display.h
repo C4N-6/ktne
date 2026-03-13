@@ -1,0 +1,13 @@
+#pragma once
+#include "input.h"
+#include "maze.h"
+#include <ncurses.h>
+
+typedef struct _DISPLAY {
+  Input input;
+  Maze maze;
+} Display;
+
+void init_display(Display *disp);
+void draw_display(Display *disp);
+void free_display(Display *disp);
