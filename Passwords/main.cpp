@@ -1,4 +1,4 @@
-#include <cctype>
+#include <iostream>
 #include <ncurses.h>
 
 #include "Answer.hpp"
@@ -7,11 +7,15 @@
 const char *help{"passwords <COLUMN1> <COLUMN2> <COLUMN3> <COLUMN4> <COLUMN5>"};
 
 int main(int argc, char *argv[]) {
+  if (argc > 6) {
+    std::cerr << help;
+    return 1;
+  }
   initscr();
   noecho();
   if (has_colors() == FALSE) {
     endwin();
-    printf("Your terminal does not support color\n");
+    std::cerr << "Your terminal does not support color\n";
     return 1;
   }
   start_color();

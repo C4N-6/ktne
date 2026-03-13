@@ -34,4 +34,12 @@ public:
     }
     return count;
   }
+  bool isPossible() const {
+    for (CharStatus c : m_charStatus) {
+      if (c == CharStatus::WRONG) {
+        return false;
+      }
+    }
+    return true;
+  }
 };

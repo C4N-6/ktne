@@ -130,7 +130,9 @@ int UserInput::findOptimalColumToFill() const {
 
   for (int i{0}; i < characterDensity.size(); i++) {
     for (int j{0}; j < passwords.size(); j++) {
-      characterDensity[i].at(passwords.at(j).at(i) - 97)++;
+      if (ans.at(j).isPossible()) {
+        characterDensity[i].at(passwords.at(j).at(i) - 97)++;
+      }
     }
   }
 
@@ -144,7 +146,7 @@ int UserInput::findOptimalColumToFill() const {
 
   std::sort(maxCharDensity.begin(), maxCharDensity.end(),
             [](std::pair<int, size_t> a, std::pair<int, size_t> b) {
-              return a.first > b.first;
+              return a.first < b.first;
             });
 
   for (int i{0}; i < maxCharDensity.size(); i++) {
