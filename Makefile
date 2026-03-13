@@ -25,7 +25,7 @@ out/obj/mazes/%.o: Mazes/%.c
 
 install: all
 	install -D out/passwords $(BINDIR)/ktne-passwords
-	install -D out/maze $(BINDIR)/ktne-mazes
+	install -D out/mazes $(BINDIR)/ktne-mazes
 
 .PHONY: clean install
 clean:
