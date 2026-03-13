@@ -1,6 +1,27 @@
 #include "maze.h"
 
-void init_maze(Maze *maze) {
+Maze possible_mazes[9] = {{{{false, false, true, false, false},
+                            {true, false, true, false, false},
+                            {true, false, true, false, false},
+                            {true, false, false, true, false},
+                            {false, false, true, false, true},
+                            {false, true, false, true, false}},
+                           {{false, true, false, false, true, true},
+                            {false, false, true, true, true, false},
+                            {false, true, false, false, true, false},
+                            {false, true, true, true, true, false},
+                            {false, true, false, false, true, false}},
+                           {{0, 1}, {5, 2}}},
+                          {{}, {}, {{}, {}}},
+                          {{}, {}, {{}, {}}},
+                          {{}, {}, {{}, {}}},
+                          {{}, {}, {{}, {}}},
+                          {{}, {}, {{}, {}}},
+                          {{}, {}, {{}, {}}},
+                          {{}, {}, {{}, {}}},
+                          {{}, {}, {{}, {}}}};
+
+void init_maze(MazeDisplay *maze) {
   int x, y;
   getmaxyx(stdscr, y, x);
   int split_point = x / 2 + 1;
@@ -13,7 +34,7 @@ void init_maze(Maze *maze) {
   }
 }
 
-void draw_maze(Maze *maze) {
+void draw_maze(MazeDisplay *maze) {
   wclear(maze->win);
   int x, y;
   getmaxyx(maze->win, x, y);
@@ -25,7 +46,7 @@ void draw_maze(Maze *maze) {
   }
   wnoutrefresh(maze->win);
 }
-void resize_maze(Maze *maze) {
+void resize_maze(MazeDisplay *maze) {
   int x, y;
   getmaxyx(stdscr, y, x);
   int split_point = x / 2 + 1;
@@ -39,4 +60,4 @@ void resize_maze(Maze *maze) {
   }
 }
 
-void free_maze(Maze *maze) { delwin(maze->win); }
+void free_maze(MazeDisplay *maze) { delwin(maze->win); }

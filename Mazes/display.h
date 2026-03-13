@@ -5,7 +5,7 @@
 
 typedef struct _DISPLAY {
   Input input;
-  Maze maze;
+  MazeDisplay maze;
 } Display;
 
 void init_display(Display *disp);
