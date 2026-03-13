@@ -15,14 +15,22 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   start_color();
-  refresh();
+  refresh(); // I do not know why I have to call this but it is making my output
+             // showing so I am calling it
 
   Display disp;
   init_display(&disp);
 
   draw_display(&disp);
 
-  getch();
+  int input;
+  do {
+    input = getch();
+    if (input == KEY_RESIZE) {
+      resize_display(&disp);
+    }
+
+  } while (input != 'q');
 
   endwin();
   return EXIT_SUCCESS;

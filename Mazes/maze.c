@@ -3,31 +3,40 @@
 void init_maze(Maze *maze) {
   int x, y;
   getmaxyx(stdscr, y, x);
-  int split_point = x / 2;
-  maze->win = newwin(0, x - split_point - 1, 0, split_point + 1);
+  int split_point = x / 2 + 1;
 
-  getmaxyx(maze->win, y, x);
-  if (x > y) {
-    maze->maze_win = derwin(maze->win, y, y, 0, (x - y) / 2);
+  if (x - split_point > y) {
+    maze->win = newwin(y, y, 0, split_point + (x - split_point - y) / 2);
   } else {
-    maze->maze_win = derwin(maze->win, x, x, (y - x) / 2, 0);
+    maze->win = newwin(x - split_point, x - split_point,
+                       (y + split_point - x) / 2, split_point);
   }
 }
 
 void draw_maze(Maze *maze) {
-  wclear(maze->maze_win);
+  wclear(maze->win);
   int x, y;
-  getmaxyx(maze->maze_win, x, y);
+  getmaxyx(maze->win, x, y);
 
   for (int r = 0; r < y; r++) {
     for (int c = 0; c < x; c++) {
-      mvwaddch(maze->maze_win, r, c, '&');
+      mvwaddch(maze->win, r, c, '&');
     }
   }
-  wrefresh(maze->maze_win);
+  wnoutrefresh(maze->win);
+}
+void resize_maze(Maze *maze) {
+  int x, y;
+  getmaxyx(stdscr, y, x);
+  int split_point = x / 2 + 1;
+
+  if (x - split_point > y) {
+    mvwin(maze->win, 0, split_point + (x - split_point - y) / 2);
+    wresize(maze->win, y, y);
+  } else {
+    mvwin(maze->win, (y + split_point - x) / 2, split_point);
+    wresize(maze->win, x - split_point, x - split_point);
+  }
 }
 
-void free_maze(Maze *maze) {
-  delwin(maze->maze_win);
-  delwin(maze->win);
-}
+void free_maze(Maze *maze) { delwin(maze->win); }

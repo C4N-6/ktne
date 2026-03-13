@@ -7,4 +7,5 @@ typedef struct _INPUT {
 
 void init_input(Input *input);
 void draw_input(Input *input);
+void resize_input(Input *input);
 void free_input(Input *input);

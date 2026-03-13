@@ -11,6 +11,15 @@ void init_display(Display *disp) {
 void draw_display(Display *disp) {
   draw_input(&disp->input);
   draw_maze(&disp->maze);
+  doupdate();
+}
+
+void resize_display(Display *disp) {
+  resize_input(&disp->input);
+  resize_maze(&disp->maze);
+  clear();
+  wnoutrefresh(stdscr);
+  draw_display(disp);
 }
 
 void free_display(Display *disp) {

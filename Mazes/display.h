@@ -10,4 +10,5 @@ typedef struct _DISPLAY {
 
 void init_display(Display *disp);
 void draw_display(Display *disp);
+void resize_display(Display *disp);
 void free_display(Display *disp);
