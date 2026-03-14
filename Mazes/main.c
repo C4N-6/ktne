@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "Your terminal does not support color\n");
     return 1;
   }
+  use_default_colors();
   start_color();
   refresh(); // I do not know why I have to call this but it is making my output
              // showing so I am calling it

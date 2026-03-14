@@ -1,6 +1,10 @@
 #pragma once
 #include <ncurses.h>
 
+#define WALL_THICKNESS 1
+#define WALL_CHAR '#'
+#define WALL_INTERSECT_CHAR '+'
+
 typedef struct _POINT {
   int x;
   int y;
@@ -12,10 +16,11 @@ typedef struct _MAZE {
   Point indicator[2];
 } Maze;
 
-extern Maze possible_mazes[9];
+extern const Maze possible_mazes[9];
 
 typedef struct _MAZE_DISPLAY {
   WINDOW *win;
+  const Maze *current_maze;
 } MazeDisplay;
 
 void init_maze(MazeDisplay *maze);
