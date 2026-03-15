@@ -86,7 +86,18 @@ const Maze possible_mazes[9] = {{{{false, false, true, false, false},
                                   {false, false, false, true, true, false},
                                   {false, true, true, true, false, false}},
                                  {{1, 0}, {1, 5}}},
-                                {{}, {}, {{}, {}}},
+                                {{{true, false, false, true, false},
+                                  {false, false, true, false, true},
+                                  {true, false, false, false, true},
+                                  {true, false, true, false, false},
+                                  {true, true, false, false, false},
+                                  {false, false, false, false, false}},
+                                 {{false, false, true, false, false, false},
+                                  {false, true, true, true, true, false},
+                                  {false, false, true, true, false, false},
+                                  {false, true, false, true, true, true},
+                                  {false, false, true, true, true, true}},
+                                 {{2, 3}, {3, 0}}},
                                 {{}, {}, {{}, {}}}};
 
 int get_maze_side_length(int max_side_length) {
@@ -115,7 +126,7 @@ void init_maze(MazeDisplay *maze) {
   }
   maze->win = newwin(side_length, side_length, y_pos, x_pos);
 
-  maze->current_maze = &possible_mazes[6];
+  maze->current_maze = &possible_mazes[7];
 }
 
 void draw_maze(MazeDisplay *maze) {
