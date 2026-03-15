@@ -1,9 +1,10 @@
 #include "input.h"
+#include "display.h"
 
 void init_input(Input *input) {
   int x, y;
   getmaxyx(stdscr, y, x);
-  int split_point = x / 2;
+  int split_point = x / SCREEN_SPLIT_RATIO;
   input->win = newwin(y, split_point, 0, 0);
 }
 
@@ -22,7 +23,7 @@ void draw_input(Input *input) {
 void resize_input(Input *input) {
   int x, y;
   getmaxyx(stdscr, y, x);
-  int split_point = x / 2;
+  int split_point = x / SCREEN_SPLIT_RATIO;
   wresize(input->win, y, split_point);
 }
 

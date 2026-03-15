@@ -1,4 +1,5 @@
 #include "maze.h"
+#include "display.h"
 
 const Maze possible_mazes[9] = {{{{false, false, true, false, false},
                                   {true, false, true, false, false},
@@ -32,7 +33,7 @@ int get_maze_side_length(int max_side_length) {
 void init_maze(MazeDisplay *maze) {
   int x, y;
   getmaxyx(stdscr, y, x);
-  int split_point = x / 2 + 1;
+  int split_point = x / SCREEN_SPLIT_RATIO + 1;
 
   int side_length, x_pos, y_pos;
 
@@ -102,7 +103,7 @@ void draw_maze(MazeDisplay *maze) {
 void resize_maze(MazeDisplay *maze) {
   int x, y;
   getmaxyx(stdscr, y, x);
-  int split_point = x / 2 + 1;
+  int split_point = x / SCREEN_SPLIT_RATIO + 1;
 
   int side_length, x_pos, y_pos;
 
@@ -121,26 +122,27 @@ void resize_maze(MazeDisplay *maze) {
 
 void free_maze(MazeDisplay *maze) { delwin(maze->win); }
 
+#define CIRCLE_ERROR 1;
 void draw_circle(WINDOW *win) {
   int x_max, y_max;
   getmaxyx(win, x_max, y_max);
 
   int center = x_max / 2;
-  int radius = (x_max - 2) / 4;
+  int radius = (x_max - 2) / 2;
 
   int x = radius;
   int y = 0;
-  int err = 0;
+  int err = CIRCLE_ERROR;
 
   while (x >= y) {
-    mvwaddch(win, center + y, center + x * 2, 'o');
-    mvwaddch(win, center + x, center + y * 2, 'o');
-    mvwaddch(win, center + x, center - y * 2, 'o');
-    mvwaddch(win, center + y, center - x * 2, 'o');
-    mvwaddch(win, center - y, center - x * 2, 'o');
-    mvwaddch(win, center - x, center - y * 2, 'o');
-    mvwaddch(win, center - x, center + y * 2, 'o');
-    mvwaddch(win, center - y, center + x * 2, 'o');
+    mvwaddch(win, center + y, center + x, 'o');
+    mvwaddch(win, center + x, center + y, 'o');
+    mvwaddch(win, center + x, center - y, 'o');
+    mvwaddch(win, center + y, center - x, 'o');
+    mvwaddch(win, center - y, center - x, 'o');
+    mvwaddch(win, center - x, center - y, 'o');
+    mvwaddch(win, center - x, center + y, 'o');
+    mvwaddch(win, center - y, center + x, 'o');
 
     if (err <= 0) {
       y += 1;

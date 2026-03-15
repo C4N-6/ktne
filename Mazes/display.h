@@ -3,6 +3,8 @@
 #include "maze.h"
 #include <ncurses.h>
 
+#define SCREEN_SPLIT_RATIO 3
+
 typedef struct _DISPLAY {
   Input input;
   MazeDisplay maze;
