@@ -57,6 +57,7 @@ void draw_maze(MazeDisplay *maze) {
 
   int cell_size = (x - (2 + 5 * WALL_THICKNESS)) / 6;
 
+  wattron(maze->win, COLOR_PAIR(WALL_COLOR));
   wborder(maze->win, WALL_CHAR, WALL_CHAR, WALL_CHAR, WALL_CHAR, WALL_CHAR,
           WALL_CHAR, WALL_CHAR, WALL_CHAR);
 
@@ -78,10 +79,24 @@ void draw_maze(MazeDisplay *maze) {
         if (maze->current_maze->horizontal_walls[pos.y][pos.x]) {
           mvwaddch(maze->win, r, c, WALL_CHAR);
         }
-      } else { // is a cell
       }
     }
   }
+  wattroff(maze->win, COLOR_PAIR(WALL_COLOR));
+
+  WINDOW *w = derwin(
+      maze->win, cell_size, cell_size,
+      1 + maze->current_maze->indicator[0].y * (cell_size + WALL_THICKNESS),
+      1 + maze->current_maze->indicator[0].x * (cell_size + WALL_THICKNESS));
+  wattron(w, COLOR_PAIR(INDICATOR_COLOR));
+  draw_circle(w);
+  mvderwin(
+      w, 1 + maze->current_maze->indicator[1].y * (cell_size + WALL_THICKNESS),
+      1 + maze->current_maze->indicator[1].x * (cell_size + WALL_THICKNESS));
+  draw_circle(w);
+  wattroff(w, COLOR_PAIR(INDICATOR_COLOR));
+  delwin(w);
+  w = NULL;
   wnoutrefresh(maze->win);
 }
 void resize_maze(MazeDisplay *maze) {
@@ -105,3 +120,36 @@ void resize_maze(MazeDisplay *maze) {
 }
 
 void free_maze(MazeDisplay *maze) { delwin(maze->win); }
+
+void draw_circle(WINDOW *win) {
+  int x_max, y_max;
+  getmaxyx(win, x_max, y_max);
+
+  int center = x_max / 2;
+  int radius = (x_max - 2) / 4;
+
+  int x = radius;
+  int y = 0;
+  int err = 0;
+
+  while (x >= y) {
+    mvwaddch(win, center + y, center + x * 2, 'o');
+    mvwaddch(win, center + x, center + y * 2, 'o');
+    mvwaddch(win, center + x, center - y * 2, 'o');
+    mvwaddch(win, center + y, center - x * 2, 'o');
+    mvwaddch(win, center - y, center - x * 2, 'o');
+    mvwaddch(win, center - x, center - y * 2, 'o');
+    mvwaddch(win, center - x, center + y * 2, 'o');
+    mvwaddch(win, center - y, center + x * 2, 'o');
+
+    if (err <= 0) {
+      y += 1;
+      err += 2 * y + 1;
+    }
+
+    if (err > 0) {
+      x -= 1;
+      err -= 2 * x + 1;
+    }
+  }
+}

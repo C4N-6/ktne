@@ -4,6 +4,10 @@
 #define WALL_THICKNESS 1
 #define WALL_CHAR '#'
 #define WALL_INTERSECT_CHAR '+'
+#define WALL_COLOR 1
+
+#define INDICATOR_CHAR '*'
+#define INDICATOR_COLOR 2
 
 typedef struct _POINT {
   int x;
@@ -27,3 +31,5 @@ void init_maze(MazeDisplay *maze);
 void draw_maze(MazeDisplay *maze);
 void resize_maze(MazeDisplay *maze);
 void free_maze(MazeDisplay *maze);
+
+void draw_circle(WINDOW *win);
