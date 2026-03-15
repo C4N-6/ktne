@@ -5,6 +5,8 @@
 
 #define SCREEN_SPLIT_RATIO 3
 
+void wprintw_centered(WINDOW *win, char *str);
+
 typedef struct _DISPLAY {
   Input input;
   MazeDisplay maze;

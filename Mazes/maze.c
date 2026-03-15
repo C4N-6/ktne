@@ -126,7 +126,7 @@ void init_maze(MazeDisplay *maze) {
   }
   maze->win = newwin(side_length, side_length, y_pos, x_pos);
 
-  maze->current_maze = &possible_mazes[7];
+  maze->current_maze = NULL; //&possible_mazes[8];
 }
 
 void draw_maze(MazeDisplay *maze) {
@@ -139,6 +139,12 @@ void draw_maze(MazeDisplay *maze) {
   wattron(maze->win, COLOR_PAIR(WALL_COLOR));
   wborder(maze->win, WALL_CHAR, WALL_CHAR, WALL_CHAR, WALL_CHAR, WALL_CHAR,
           WALL_CHAR, WALL_CHAR, WALL_CHAR);
+  if (maze->current_maze == NULL) {
+    wattroff(maze->win, COLOR_PAIR(WALL_COLOR));
+    wprintw_centered(maze->win, "no maze chosen");
+    wnoutrefresh(maze->win);
+    return;
+  }
 
   for (int r = 1; r < y - 1; r++) {
     for (int c = 1; c < x - 1; c++) {

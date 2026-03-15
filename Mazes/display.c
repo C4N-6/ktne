@@ -2,6 +2,14 @@
 #include "input.h"
 #include "maze.h"
 #include <ncurses.h>
+#include <string.h>
+
+void wprintw_centered(WINDOW *win, char *str) {
+  int x, y;
+  getmaxyx(win, x, y);
+  wmove(win, y / 2, (x - strlen(str)) / 2);
+  wprintw(win, str);
+}
 
 void init_display(Display *disp) {
   init_input(&disp->input);
