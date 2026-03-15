@@ -8,7 +8,7 @@ void wprintw_centered(WINDOW *win, char *str) {
   int x, y;
   getmaxyx(win, x, y);
   wmove(win, y / 2, (x - strlen(str)) / 2);
-  wprintw(win, str);
+  wprintw(win, "%s", str);
 }
 
 void init_display(Display *disp) {
