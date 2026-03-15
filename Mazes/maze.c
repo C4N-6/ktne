@@ -38,7 +38,18 @@ const Maze possible_mazes[9] = {{{{false, false, true, false, false},
                                   {false, false, false, false, false, false},
                                   {false, true, true, false, false, false}},
                                  {{3, 3}, {5, 3}}},
-                                {{}, {}, {{}, {}}},
+                                {{{false, true, false, false, false},
+                                  {true, true, false, false, false},
+                                  {true, false, true, false, true},
+                                  {true, false, false, false, false},
+                                  {false, false, false, false, true},
+                                  {false, false, true, false, true}},
+                                 {{false, false, true, true, true, false},
+                                  {false, false, false, true, true, false},
+                                  {false, true, true, false, true, false},
+                                  {false, true, true, true, true, false},
+                                  {false, true, true, true, false, false}},
+                                 {{0, 0}, {0, 3}}},
                                 {{}, {}, {{}, {}}},
                                 {{}, {}, {{}, {}}},
                                 {{}, {}, {{}, {}}},
@@ -71,7 +82,7 @@ void init_maze(MazeDisplay *maze) {
   }
   maze->win = newwin(side_length, side_length, y_pos, x_pos);
 
-  maze->current_maze = &possible_mazes[2];
+  maze->current_maze = &possible_mazes[3];
 }
 
 void draw_maze(MazeDisplay *maze) {
