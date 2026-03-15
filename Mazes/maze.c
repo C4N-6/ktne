@@ -1,5 +1,6 @@
 #include "maze.h"
 #include "display.h"
+#include <stdbool.h>
 
 const Maze possible_mazes[9] = {{{{false, false, true, false, false},
                                   {true, false, true, false, false},
@@ -13,7 +14,18 @@ const Maze possible_mazes[9] = {{{{false, false, true, false, false},
                                   {false, true, true, true, true, false},
                                   {false, true, false, false, true, false}},
                                  {{0, 1}, {5, 2}}},
-                                {{}, {}, {{}, {}}},
+                                {{{false, false, true, false, false},
+                                  {false, true, false, true, false},
+                                  {true, false, true, false, false},
+                                  {false, true, false, true, true},
+                                  {true, true, true, false, true},
+                                  {true, false, true, false, false}},
+                                 {{true, false, true, false, false, true},
+                                  {false, true, false, true, true, false},
+                                  {false, false, true, false, true, false},
+                                  {false, true, false, true, false, false},
+                                  {false, false, false, false, true, false}},
+                                 {{4, 1}, {1, 3}}},
                                 {{}, {}, {{}, {}}},
                                 {{}, {}, {{}, {}}},
                                 {{}, {}, {{}, {}}},
@@ -48,7 +60,7 @@ void init_maze(MazeDisplay *maze) {
   }
   maze->win = newwin(side_length, side_length, y_pos, x_pos);
 
-  maze->current_maze = &possible_mazes[0];
+  maze->current_maze = &possible_mazes[1];
 }
 
 void draw_maze(MazeDisplay *maze) {
