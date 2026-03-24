@@ -2,7 +2,6 @@
 #include "input.h"
 #include "maze.h"
 #include <ncurses.h>
-
 #define SCREEN_SPLIT_RATIO 3
 
 void wprintw_centered(WINDOW *win, char *str);

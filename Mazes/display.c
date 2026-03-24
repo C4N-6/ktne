@@ -17,8 +17,8 @@ void init_display(Display *disp) {
 }
 
 void draw_display(Display *disp) {
-  draw_input(&disp->input);
   draw_maze(&disp->maze);
+  draw_input(&disp->input);
   doupdate();
 }
 
