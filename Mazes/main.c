@@ -22,8 +22,8 @@ int main(int argc, char *argv[]) {
   init_pair(WALL_COLOR, COLOR_RED, -1);
   init_pair(INDICATOR_COLOR, COLOR_GREEN, -1);
 
-  refresh(); // I do not know why I have to call this but it is making my output
-             // showing so I am calling it
+  wnoutrefresh(stdscr); // I do not know why I have to call this but it is
+                        // making my output showing so I am calling it
 
   Display disp;
   init_display(&disp);
