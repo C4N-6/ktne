@@ -14,9 +14,14 @@ char *frame_of_ref_to_string(enum frame_of_ref ref);
 typedef struct _INPUT {
   WINDOW *win;
   Point curser_pos;
-  Point indicators[2];
-  Point start_pos;
-  Point end_pos;
+  union {
+    struct {
+      Point indicators[2];
+      Point start_pos;
+      Point end_pos;
+    };
+    Point points[4];
+  };
   enum frame_of_ref reference_frame;
 } Input;
 

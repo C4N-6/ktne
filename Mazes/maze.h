@@ -14,10 +14,12 @@ typedef struct _POINT {
   int y;
 } Point;
 
+int point_cmp(const Point *p1, const Point *p2);
+
 typedef struct _MAZE {
   bool vertical_walls[6][5];
   bool horizontal_walls[5][6];
-  Point indicator[2];
+  Point indicators[2];
 } Maze;
 
 extern const Maze possible_mazes[9];
@@ -28,7 +30,7 @@ typedef struct _MAZE_DISPLAY {
 } MazeDisplay;
 
 void init_maze(MazeDisplay *maze);
-void draw_maze(MazeDisplay *maze);
+void draw_maze(MazeDisplay *maze, Point start_and_end[2]);
 void resize_maze(MazeDisplay *maze);
 void free_maze(MazeDisplay *maze);
 

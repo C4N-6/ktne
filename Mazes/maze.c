@@ -111,6 +111,14 @@ const Maze possible_mazes[9] = {{{{false, false, true, false, false},
                                   {false, false, false, false, false, true}},
                                  {{0, 4}, {2, 1}}}};
 
+int point_cmp(const Point *p1, const Point *p2) {
+  int temp = p2->x - p1->x;
+  if (temp) {
+    return temp;
+  }
+  return p2->y - p1->y;
+}
+
 int get_maze_side_length(int max_side_length) {
   int none_boarder_side_length = max_side_length - (2 + 5 * WALL_THICKNESS);
   if (max_side_length <= 0) {
@@ -140,7 +148,7 @@ void init_maze(MazeDisplay *maze) {
   maze->current_maze = &possible_mazes[8];
 }
 
-void draw_maze(MazeDisplay *maze) {
+void draw_maze(MazeDisplay *maze, Point start_and_end[2]) {
   wclear(maze->win);
   int x, y;
   getmaxyx(maze->win, x, y);
@@ -182,13 +190,13 @@ void draw_maze(MazeDisplay *maze) {
 
   WINDOW *w = derwin(
       maze->win, cell_size, cell_size,
-      1 + maze->current_maze->indicator[0].y * (cell_size + WALL_THICKNESS),
-      1 + maze->current_maze->indicator[0].x * (cell_size + WALL_THICKNESS));
+      1 + maze->current_maze->indicators[0].y * (cell_size + WALL_THICKNESS),
+      1 + maze->current_maze->indicators[0].x * (cell_size + WALL_THICKNESS));
   wattron(w, COLOR_PAIR(INDICATOR_COLOR));
   draw_circle(w);
   mvderwin(
-      w, 1 + maze->current_maze->indicator[1].y * (cell_size + WALL_THICKNESS),
-      1 + maze->current_maze->indicator[1].x * (cell_size + WALL_THICKNESS));
+      w, 1 + maze->current_maze->indicators[1].y * (cell_size + WALL_THICKNESS),
+      1 + maze->current_maze->indicators[1].x * (cell_size + WALL_THICKNESS));
   draw_circle(w);
   wattroff(w, COLOR_PAIR(INDICATOR_COLOR));
   delwin(w);

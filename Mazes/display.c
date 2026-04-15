@@ -17,7 +17,7 @@ void init_display(Display *disp) {
 }
 
 void draw_display(Display *disp) {
-  draw_maze(&disp->maze);
+  draw_maze(&disp->maze, disp->input.points + 2);
   draw_input(&disp->input);
   doupdate();
 }
@@ -33,4 +33,20 @@ void resize_display(Display *disp) {
 void free_display(Display *disp) {
   free_input(&disp->input);
   free_maze(&disp->maze);
+}
+
+void find_maze(Display *disp) {
+  for (int i = 0; i < sizeof(possible_mazes) / sizeof(Maze); i++) {
+    if ((!point_cmp(&possible_mazes[i].indicators[0],
+                    &disp->input.indicators[0]) ||
+         !point_cmp(&possible_mazes[i].indicators[0],
+                    &disp->input.indicators[1])) &&
+        (!point_cmp(&possible_mazes[i].indicators[1],
+                    &disp->input.indicators[0]) ||
+         !point_cmp(&possible_mazes[i].indicators[1],
+                    &disp->input.indicators[1]))) {
+      disp->maze.current_maze = &possible_mazes[i];
+      return;
+    }
+  }
 }

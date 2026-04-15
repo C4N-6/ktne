@@ -68,12 +68,52 @@ int main(int argc, char *argv[]) {
         if (replace_input >= 0 && replace_input <= 5) {
           // indexes into the exact curser position will change and replaces
           // that value with replace_input
-          ((int *)&(
-              (Point *)disp.input.indicators)[disp.input.curser_pos.y -
-                                              1])[disp.input.curser_pos.x] =
+          ((int *)&disp.input
+               .points[disp.input.curser_pos.y - 1])[disp.input.curser_pos.x] =
               replace_input;
         }
       }
+      find_maze(&disp);
+      draw_display(&disp);
+    } else if (input == 'J') {
+      if (disp.input.curser_pos.y == 0) { // change frame of reference
+        disp.input.reference_frame |= bottom_left;
+      } else { // change any points
+        Point *temp = disp.input.points + disp.input.curser_pos.y - 1;
+        temp->y = MOD(temp->y - 1, 6);
+      }
+      find_maze(&disp);
+      draw_display(&disp);
+    } else if (input == 'K') {
+      if (disp.input.curser_pos.y == 0) { // change frame of reference
+        disp.input.reference_frame &= top_right;
+      } else { // change any points
+        Point *temp = disp.input.points + disp.input.curser_pos.y - 1;
+        temp->y = MOD(temp->y + 1, 6);
+      }
+      find_maze(&disp);
+      draw_display(&disp);
+    } else if (input == 'L') {
+      if (disp.input.curser_pos.y == 0) { // change frame of reference
+        disp.input.reference_frame &= bottom_left;
+      } else { // change any points
+        // indexes into the exact curser position will change and replaces
+        // that value with replace_input
+        Point *temp = disp.input.points + disp.input.curser_pos.y - 1;
+        temp->x = MOD(temp->x + 1, 6);
+      }
+      find_maze(&disp);
+      draw_display(&disp);
+    } else if (input == 'H') {
+      if (disp.input.curser_pos.y == 0) { // change frame of reference
+        disp.input.reference_frame |= top_right;
+      } else { // change any points
+        // indexes into the exact curser position will change and replaces
+        // that value with replace_input
+        Point *temp = disp.input.points + disp.input.curser_pos.y - 1;
+        temp->x = MOD(temp->x - 1, 6);
+      }
+      find_maze(&disp);
       draw_display(&disp);
     }
   } while (input != 'q');
