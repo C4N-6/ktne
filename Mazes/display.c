@@ -36,15 +36,17 @@ void free_display(Display *disp) {
 }
 
 void find_maze(Display *disp) {
+  Point p[2] = {{disp->input.indicators[0].x, disp->input.indicators[0].y},
+                {disp->input.indicators[1].x, disp->input.indicators[1].y}};
+
+  point_convert_to_top_left_ref(&p[0], disp->input.reference_frame);
+  point_convert_to_top_left_ref(&p[1], disp->input.reference_frame);
+
   for (int i = 0; i < sizeof(possible_mazes) / sizeof(Maze); i++) {
-    if ((!point_cmp(&possible_mazes[i].indicators[0],
-                    &disp->input.indicators[0]) ||
-         !point_cmp(&possible_mazes[i].indicators[0],
-                    &disp->input.indicators[1])) &&
-        (!point_cmp(&possible_mazes[i].indicators[1],
-                    &disp->input.indicators[0]) ||
-         !point_cmp(&possible_mazes[i].indicators[1],
-                    &disp->input.indicators[1]))) {
+    if ((!point_cmp(&possible_mazes[i].indicators[0], &p[0]) ||
+         !point_cmp(&possible_mazes[i].indicators[0], &p[1])) &&
+        (!point_cmp(&possible_mazes[i].indicators[1], &p[0]) ||
+         !point_cmp(&possible_mazes[i].indicators[1], &p[1]))) {
       disp->maze.current_maze = &possible_mazes[i];
       return;
     }

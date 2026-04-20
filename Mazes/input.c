@@ -94,3 +94,13 @@ void resize_input(Input *input) {
 }
 
 void free_input(Input *input) { delwin(input->win); }
+
+void point_convert_to_top_left_ref(Point *point, enum frame_of_ref ref) {
+  if (ref & 0b10) { // it is at the bottom so swap around the y-axis
+    point->y = 5 - point->y;
+  }
+
+  if (ref & 0b01) { // it is at the bottom so swap around the x-axis
+    point->x = 5 - point->x;
+  }
+}

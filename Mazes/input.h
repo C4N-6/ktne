@@ -30,3 +30,5 @@ void draw_input(Input *input);
 void update_input_curser(Input *input);
 void resize_input(Input *input);
 void free_input(Input *input);
+
+void point_convert_to_top_left_ref(Point *point, enum frame_of_ref ref);
