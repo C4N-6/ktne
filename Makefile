@@ -1,6 +1,8 @@
 CXXFLAGS += -std=c++20 $(shell pkg-config --cflags ncurses)
-CFLAGS   += $(shell pkg-config --cflags ncurses)
+CFLAGS   += $(shell pkg-config --cflags ncurses) -Wall
 LDFLAGS  += $(shell pkg-config --libs ncurses)
+
+CC ?= gcc
 
 out ?= /usr/local
 BINDIR = $(out)/bin
