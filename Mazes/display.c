@@ -49,4 +49,6 @@ void find_maze(Display *disp) {
       return;
     }
   }
+
+  disp->maze.current_maze = NULL;
 }

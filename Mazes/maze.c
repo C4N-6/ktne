@@ -145,7 +145,7 @@ void init_maze(MazeDisplay *maze) {
   }
   maze->win = newwin(side_length, side_length, y_pos, x_pos);
 
-  maze->current_maze = &possible_mazes[8];
+  maze->current_maze = NULL;
 }
 
 void draw_maze(MazeDisplay *maze, Point start_and_end[2]) {
@@ -227,8 +227,7 @@ void free_maze(MazeDisplay *maze) { delwin(maze->win); }
 
 #define CIRCLE_ERROR 1;
 void draw_circle(WINDOW *win) {
-  int x_max, y_max;
-  getmaxyx(win, x_max, y_max);
+  int x_max = getmaxx(win);
 
   int center = x_max / 2;
   int radius = (x_max - 2) / 2;
