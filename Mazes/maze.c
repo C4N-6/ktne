@@ -193,11 +193,11 @@ void draw_maze(MazeDisplay *maze, Point start_and_end[2]) {
       1 + maze->current_maze->indicators[0].y * (cell_size + WALL_THICKNESS),
       1 + maze->current_maze->indicators[0].x * (cell_size + WALL_THICKNESS));
   wattron(w, COLOR_PAIR(INDICATOR_COLOR));
-  draw_circle(w);
+  draw_circle(w, 'o');
   mvderwin(
       w, 1 + maze->current_maze->indicators[1].y * (cell_size + WALL_THICKNESS),
       1 + maze->current_maze->indicators[1].x * (cell_size + WALL_THICKNESS));
-  draw_circle(w);
+  draw_circle(w, 'o');
   wattroff(w, COLOR_PAIR(INDICATOR_COLOR));
   delwin(w);
   w = NULL;
@@ -226,7 +226,7 @@ void resize_maze(MazeDisplay *maze) {
 void free_maze(MazeDisplay *maze) { delwin(maze->win); }
 
 #define CIRCLE_ERROR 1;
-void draw_circle(WINDOW *win) {
+void draw_circle(WINDOW *win, char c) {
   int x_max = getmaxx(win);
 
   int center = x_max / 2;
@@ -237,14 +237,14 @@ void draw_circle(WINDOW *win) {
   int err = CIRCLE_ERROR;
 
   while (x >= y) {
-    mvwaddch(win, center + y, center + x, 'o');
-    mvwaddch(win, center + x, center + y, 'o');
-    mvwaddch(win, center + x, center - y, 'o');
-    mvwaddch(win, center + y, center - x, 'o');
-    mvwaddch(win, center - y, center - x, 'o');
-    mvwaddch(win, center - x, center - y, 'o');
-    mvwaddch(win, center - x, center + y, 'o');
-    mvwaddch(win, center - y, center + x, 'o');
+    mvwaddch(win, center + y, center + x, c);
+    mvwaddch(win, center + x, center + y, c);
+    mvwaddch(win, center + x, center - y, c);
+    mvwaddch(win, center + y, center - x, c);
+    mvwaddch(win, center - y, center - x, c);
+    mvwaddch(win, center - x, center - y, c);
+    mvwaddch(win, center - x, center + y, c);
+    mvwaddch(win, center - y, center + x, c);
 
     if (err <= 0) {
       y += 1;
@@ -255,5 +255,27 @@ void draw_circle(WINDOW *win) {
       x -= 1;
       err -= 2 * x + 1;
     }
+  }
+}
+
+void draw_triangle(WINDOW *win, char c) {
+  int x, y;
+  getmaxyx(win, y, x);
+
+  Point corners[3] = {{x / 2, 1}, {1, y - 1}, {x - 1, y - 1}};
+
+  draw_line(win, &corners[0], &corners[1], c);
+  draw_line(win, &corners[1], &corners[2], c);
+  draw_line(win, &corners[2], &corners[0], c);
+}
+void draw_line(WINDOW *win, const Point *p1, const Point *p2, char c) {
+  int dx = p2->x - p1->x;
+  int dy = p2->y - p1->y;
+
+  float m = dy / (float)dx;
+
+  for (int i = p1->x; i <= p2->x; i++) {
+    int y = m * (i - p1->x) + p1->y;
+    mvwaddch(win, y, i, c);
   }
 }
