@@ -269,13 +269,38 @@ void draw_triangle(WINDOW *win, char c) {
   draw_line(win, &corners[2], &corners[0], c);
 }
 void draw_line(WINDOW *win, const Point *p1, const Point *p2, char c) {
+  if (p1->x > p2->x) {
+    const Point *temp = p1;
+    p1 = p2;
+    p2 = temp;
+  }
+
   int dx = p2->x - p1->x;
   int dy = p2->y - p1->y;
 
   float m = dy / (float)dx;
 
-  for (int i = p1->x; i <= p2->x; i++) {
-    int y = m * (i - p1->x) + p1->y;
-    mvwaddch(win, y, i, c);
+  if (m > 0) {
+    int lastY = p1->y;
+    for (int i = p1->x - 1; i <= p2->x; i++) {
+      int y = m * (i - p1->x) + p1->y;
+      for (int j = lastY; j < y; j += 1) {
+        mvwaddch(win, j, i, c);
+      }
+      lastY = y;
+    }
+  } else if (m < 0) {
+    int lastY = p2->y;
+    for (int i = p1->x; i <= p2->x + 2; i++) {
+      int y = m * (i - p1->x) + p1->y;
+      for (int j = lastY; j > y; j -= 1) {
+        mvwaddch(win, j, i - 2, c);
+      }
+      lastY = y;
+    }
+  } else {
+    for (int i = p1->x - 1; i <= p2->x; i++) {
+      mvwaddch(win, p1->y, i, c);
+    }
   }
 }
