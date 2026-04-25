@@ -36,4 +36,12 @@ void free_maze(MazeDisplay *maze);
 
 void draw_circle(WINDOW *win, char c);
 void draw_triangle(WINDOW *win, char c);
+enum direction {
+  direction_up,
+  direction_down,
+  direction_left,
+  direction_right,
+};
+void draw_arrow(WINDOW *win, enum direction d, char c);
+
 void draw_line(WINDOW *win, const Point *p1, const Point *p2, char c);

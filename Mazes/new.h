@@ -8,3 +8,5 @@
 
 #define xnew(type, count) (malloc(sizeof(type) * count))
 #define zero(n) (memset(&n, 0, sizeof(n)))
+
+#define ARRAY_SIZE(x) ((sizeof x) / (sizeof *x))

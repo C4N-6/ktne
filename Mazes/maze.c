@@ -1,5 +1,6 @@
 #include "maze.h"
 #include "display.h"
+#include "new.h"
 #include <stdbool.h>
 
 const Maze possible_mazes[9] = {{{{false, false, true, false, false},
@@ -268,6 +269,69 @@ void draw_triangle(WINDOW *win, char c) {
   draw_line(win, &corners[1], &corners[2], c);
   draw_line(win, &corners[2], &corners[0], c);
 }
+
+void draw_arrow(WINDOW *win, enum direction d, char c) {
+  int x, y;
+  getmaxyx(win, y, x);
+
+  Point start;
+  Point ends[3];
+
+  if (d == direction_up) {
+    start.x = x / 2;
+    start.y = 1;
+
+    ends[0].x = x / 2;
+    ends[0].y = y - 1;
+
+    ends[1].x = x / 4;
+    ends[1].y = x / 4;
+
+    ends[2].x = 3 * x / 4;
+    ends[2].y = x / 4;
+  } else if (d == direction_down) {
+    start.x = x / 2;
+    start.y = y - 1;
+
+    ends[0].x = x / 2;
+    ends[0].y = 1;
+
+    ends[1].x = x / 4;
+    ends[1].y = 3 * x / 4;
+
+    ends[2].x = 3 * x / 4;
+    ends[2].y = 3 * x / 4;
+  } else if (d == direction_right) {
+    start.x = x - 1;
+    start.y = y / 2;
+
+    ends[0].x = 1;
+    ends[0].y = y / 2;
+
+    ends[1].x = 3 * x / 4;
+    ends[1].y = x / 4;
+
+    ends[1].x = 3 * x / 4;
+    ends[1].y = 3 * x / 4;
+  } else if (d == direction_left) {
+    start.x = 1;
+    start.y = y / 2;
+
+    ends[0].x = x - 1;
+    ends[0].y = y / 2;
+
+    ends[1].x = x / 4;
+    ends[1].y = x / 4;
+
+    ends[1].x = x / 4;
+    ends[1].y = 3 * x / 4;
+  }
+
+  for (int i = 0; i < ARRAY_SIZE(ends); i++) {
+    draw_line(win, &start, &ends[i], c);
+  }
+}
+
 void draw_line(WINDOW *win, const Point *p1, const Point *p2, char c) {
   if (p1->x > p2->x) {
     const Point *temp = p1;
