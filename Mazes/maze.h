@@ -9,6 +9,8 @@
 #define INDICATOR_CHAR '*'
 #define INDICATOR_COLOR 2
 
+#define CIRCLE_ERROR 1;
+
 typedef struct _POINT {
   int x;
   int y;
@@ -33,6 +35,9 @@ void init_maze(MazeDisplay *maze);
 void draw_maze(MazeDisplay *maze, Point start_and_end[2]);
 void resize_maze(MazeDisplay *maze);
 void free_maze(MazeDisplay *maze);
+
+WINDOW *init_cell_window(const MazeDisplay *maze, const Point *p);
+void move_cell_window(const MazeDisplay *maze, WINDOW *win, const Point *p);
 
 void draw_circle(WINDOW *win, char c);
 void draw_triangle(WINDOW *win, char c);

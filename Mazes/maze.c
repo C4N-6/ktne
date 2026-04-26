@@ -188,22 +188,17 @@ void draw_maze(MazeDisplay *maze, Point start_and_end[2]) {
     }
   }
   wattroff(maze->win, COLOR_PAIR(WALL_COLOR));
-
-  WINDOW *w = derwin(
-      maze->win, cell_size, cell_size,
-      1 + maze->current_maze->indicators[0].y * (cell_size + WALL_THICKNESS),
-      1 + maze->current_maze->indicators[0].x * (cell_size + WALL_THICKNESS));
+  WINDOW *w = init_cell_window(maze, &maze->current_maze->indicators[0]);
   wattron(w, COLOR_PAIR(INDICATOR_COLOR));
   draw_circle(w, 'o');
-  mvderwin(
-      w, 1 + maze->current_maze->indicators[1].y * (cell_size + WALL_THICKNESS),
-      1 + maze->current_maze->indicators[1].x * (cell_size + WALL_THICKNESS));
+  move_cell_window(maze, w, &maze->current_maze->indicators[1]);
   draw_circle(w, 'o');
   wattroff(w, COLOR_PAIR(INDICATOR_COLOR));
   delwin(w);
   w = NULL;
   wnoutrefresh(maze->win);
 }
+
 void resize_maze(MazeDisplay *maze) {
   int x, y;
   getmaxyx(stdscr, y, x);
@@ -226,7 +221,20 @@ void resize_maze(MazeDisplay *maze) {
 
 void free_maze(MazeDisplay *maze) { delwin(maze->win); }
 
-#define CIRCLE_ERROR 1;
+WINDOW *init_cell_window(const MazeDisplay *maze, const Point *p) {
+  int x = getmaxx(maze->win);
+  int cell_size = (x - (2 + 5 * WALL_THICKNESS)) / 6;
+  return derwin(maze->win, cell_size, cell_size,
+                1 + p->y * (cell_size + WALL_THICKNESS),
+                1 + p->x * (cell_size + WALL_THICKNESS));
+}
+void move_cell_window(const MazeDisplay *maze, WINDOW *win, const Point *p) {
+  int x = getmaxx(maze->win);
+  int cell_size = (x - (2 + 5 * WALL_THICKNESS)) / 6;
+  mvderwin(win, 1 + p->y * (cell_size + WALL_THICKNESS),
+           1 + p->x * (cell_size + WALL_THICKNESS));
+}
+
 void draw_circle(WINDOW *win, char c) {
   int x_max = getmaxx(win);
 
