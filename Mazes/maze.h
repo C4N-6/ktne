@@ -16,7 +16,7 @@ typedef struct _POINT {
   int y;
 } Point;
 
-int point_cmp(const Point *p1, const Point *p2);
+int cmp_point(const Point *p1, const Point *p2);
 
 enum direction {
   direction_up,
