@@ -223,12 +223,32 @@ void resize_maze_display(MazeDisplay *maze) {
 
 void free_maze_display(MazeDisplay *maze) { delwin(maze->win); }
 
+int find_point_in_paths(const Path *path_array, const Point *p) {
+  for (int i = 0; i < arrlen(path_array); i++) {
+    if (point_cmp(p, &path_array[i].p)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 bool pathfind_recursive(const Maze *m, const Point *end, const Point *curr,
                         Path *path) {
   if (point_cmp(end, curr) == 0) {
     return true;
   }
-  // TODO: code the simplifying case for pathfind
+  for (enum direction d = direction_up; d <= direction_right; d++) {
+    if (true /* TODO: check if there is a wall at that direction */) {
+      Point nextPoint;
+
+      // TODO: set nextPoint to the next point
+
+      if (find_point_in_paths(path, &nextPoint) != -1 &&
+          pathfind_recursive(m, end, &nextPoint, path)) {
+        return true;
+      }
+    }
+  }
   return false;
 }
 
