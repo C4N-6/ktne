@@ -17,7 +17,7 @@ out/obj/passwords/%.o: Passwords/%.cpp
 	@mkdir -p out/obj/passwords
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-out/mazes: out/obj/mazes/main.o out/obj/mazes/maze.o out/obj/mazes/input.o out/obj/mazes/display.o
+out/mazes: out/obj/mazes/main.o out/obj/mazes/maze.o out/obj/mazes/input.o out/obj/mazes/display.o out/obj/mazes/stb_ds.o
 	@mkdir -p out
 	$(CC) $^ $(LDFLAGS) -o $@
 

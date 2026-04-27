@@ -1,6 +1,8 @@
 #include "maze.h"
 #include "display.h"
 #include "new.h"
+
+#include "stb_ds.h"
 #include <stdbool.h>
 
 const Maze possible_mazes[9] = {{{{false, false, true, false, false},
@@ -220,6 +222,11 @@ void resize_maze(MazeDisplay *maze) {
 }
 
 void free_maze(MazeDisplay *maze) { delwin(maze->win); }
+
+Path *pathfind(const Maze *m, Point start_and_end[2]) {
+  Path *path = NULL;
+  return path;
+}
 
 WINDOW *init_cell_window(const MazeDisplay *maze, const Point *p) {
   int x = getmaxx(maze->win);
