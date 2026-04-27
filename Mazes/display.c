@@ -13,18 +13,18 @@ void wprintw_centered(WINDOW *win, char *str) {
 
 void init_display(Display *disp) {
   init_input(&disp->input);
-  init_maze(&disp->maze);
+  init_maze_display(&disp->maze);
 }
 
 void draw_display(Display *disp) {
-  draw_maze(&disp->maze, disp->input.points + 2);
+  draw_maze_display(&disp->maze, disp->input.points + 2);
   draw_input(&disp->input);
   doupdate();
 }
 
 void resize_display(Display *disp) {
   resize_input(&disp->input);
-  resize_maze(&disp->maze);
+  resize_maze_display(&disp->maze);
   clear();
   wnoutrefresh(stdscr);
   draw_display(disp);
@@ -32,7 +32,7 @@ void resize_display(Display *disp) {
 
 void free_display(Display *disp) {
   free_input(&disp->input);
-  free_maze(&disp->maze);
+  free_maze_display(&disp->maze);
 }
 
 void find_maze(Display *disp) {

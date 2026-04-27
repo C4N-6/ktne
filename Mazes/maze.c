@@ -130,7 +130,7 @@ int get_maze_side_length(int max_side_length) {
   return max_side_length - none_boarder_side_length % 6;
 }
 
-void init_maze(MazeDisplay *maze) {
+void init_maze_display(MazeDisplay *maze) {
   int x, y;
   getmaxyx(stdscr, y, x);
   int split_point = x / SCREEN_SPLIT_RATIO + 1;
@@ -151,7 +151,7 @@ void init_maze(MazeDisplay *maze) {
   maze->current_maze = NULL;
 }
 
-void draw_maze(MazeDisplay *maze, Point start_and_end[2]) {
+void draw_maze_display(MazeDisplay *maze, Point start_and_end[2]) {
   wclear(maze->win);
   int x, y;
   getmaxyx(maze->win, x, y);
@@ -201,7 +201,7 @@ void draw_maze(MazeDisplay *maze, Point start_and_end[2]) {
   wnoutrefresh(maze->win);
 }
 
-void resize_maze(MazeDisplay *maze) {
+void resize_maze_display(MazeDisplay *maze) {
   int x, y;
   getmaxyx(stdscr, y, x);
   int split_point = x / SCREEN_SPLIT_RATIO + 1;
@@ -221,10 +221,20 @@ void resize_maze(MazeDisplay *maze) {
   wresize(maze->win, side_length, side_length);
 }
 
-void free_maze(MazeDisplay *maze) { delwin(maze->win); }
+void free_maze_display(MazeDisplay *maze) { delwin(maze->win); }
+
+bool pathfind_recursive(const Maze *m, const Point *end, const Point *curr,
+                        Path *path) {
+  if (point_cmp(end, curr) == 0) {
+    return true;
+  }
+  // TODO: code the simplifying case for pathfind
+  return false;
+}
 
 Path *pathfind(const Maze *m, Point start_and_end[2]) {
   Path *path = NULL;
+  pathfind_recursive(m, &start_and_end[1], &start_and_end[0], path);
   return path;
 }
 

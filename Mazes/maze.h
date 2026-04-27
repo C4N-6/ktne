@@ -43,10 +43,10 @@ typedef struct {
   enum direction d;
 } Path;
 
-void init_maze(MazeDisplay *maze);
-void draw_maze(MazeDisplay *maze, Point start_and_end[2]);
-void resize_maze(MazeDisplay *maze);
-void free_maze(MazeDisplay *maze);
+void init_maze_display(MazeDisplay *maze);
+void draw_maze_display(MazeDisplay *maze, Point start_and_end[2]);
+void resize_maze_display(MazeDisplay *maze);
+void free_maze_display(MazeDisplay *maze);
 
 Path *pathfind(const Maze *m, Point start_and_end[2]);
 
