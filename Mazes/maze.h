@@ -23,13 +23,19 @@ enum direction {
   direction_down,
   direction_left,
   direction_right,
+  direction_none,
 };
+
+void move_by_point(Point *p, enum direction d, int amount);
+#define move_point(p, d) move_by_point(p, d, 1)
 
 typedef struct _MAZE {
   bool vertical_walls[6][5];
   bool horizontal_walls[5][6];
   Point indicators[2];
 } Maze;
+
+bool can_move(const Maze *maze, const Point *p, enum direction d);
 
 extern const Maze possible_mazes[9];
 

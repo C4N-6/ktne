@@ -122,6 +122,55 @@ int cmp_point(const Point *p1, const Point *p2) {
   return p2->y - p1->y;
 }
 
+void move_by_point(Point *p, enum direction d, int amount) {
+  switch (d) {
+  case direction_up:
+    p->y -= amount;
+    return;
+  case direction_down:
+    p->y += amount;
+    return;
+  case direction_right:
+    p->x += amount;
+    return;
+  case direction_left:
+    p->x -= amount;
+    return;
+  case direction_none:
+    return;
+  }
+}
+
+bool can_move(const Maze *maze, const Point *p, enum direction d) {
+  switch (d) {
+  case direction_up:
+    if ((p->y - 1 < 0 || p->y - 1 > 5) || (p->x < 0 || p->x > 5)) {
+      return false;
+    }
+    return !maze->horizontal_walls[p->y - 1][p->x];
+  case direction_down:
+    if ((p->y + 1 < 0 || p->y + 1 > 5) || (p->x < 0 || p->x > 5)) {
+      return false;
+    }
+    return !maze->horizontal_walls[p->y][p->x];
+  case direction_left:
+    if ((p->y < 0 || p->y > 5) || (p->x - 1 < 0 || p->x - 1 > 5)) {
+      return false;
+    }
+    return !maze->vertical_walls[p->y][p->x - 1];
+  case direction_right:
+    if ((p->y < 0 || p->y > 5) || (p->x + 1 < 0 || p->x + 1 > 5)) {
+      return false;
+    }
+    return !maze->vertical_walls[p->y][p->x];
+  case direction_none:
+    return true;
+  }
+  // i do not know how you would reach here but the compiler is complaning so
+  // here you go
+  return true;
+}
+
 int get_maze_side_length(int max_side_length) {
   int none_boarder_side_length = max_side_length - (2 + 5 * WALL_THICKNESS);
   if (max_side_length <= 0) {
@@ -196,8 +245,16 @@ void draw_maze_display(MazeDisplay *maze, Point start_and_end[2]) {
   move_cell_window(maze, w, &maze->current_maze->indicators[1]);
   draw_circle(w, 'o');
   wattroff(w, COLOR_PAIR(INDICATOR_COLOR));
+  // TODO: display the path from the pathfinding algorithm
   delwin(w);
   w = NULL;
+  // code to display pathfinding for debug
+  // Path *p = pathfind(maze->current_maze, (Point[2]){{0, 0}, {3, 3}});
+  // wmove(maze->win, 3, 3);
+  // wprintw(maze->win, "path length: %d\n", arrlen(p));
+  // for (int i = 0; i < arrlen(p); i++) {
+  //   wprintw(maze->win, "(%d, %d), %d\n", p[i].p.x, p[i].p.y, p[i].d);
+  // }
   wnoutrefresh(maze->win);
 }
 
@@ -225,7 +282,7 @@ void free_maze_display(MazeDisplay *maze) { delwin(maze->win); }
 
 int find_point_in_paths(const Path *path_array, const Point *p) {
   for (int i = 0; i < arrlen(path_array); i++) {
-    if (cmp_point(p, &path_array[i].p)) {
+    if (cmp_point(p, &path_array[i].p) == 0) {
       return i;
     }
   }
@@ -233,28 +290,30 @@ int find_point_in_paths(const Path *path_array, const Point *p) {
 }
 
 bool pathfind_recursive(const Maze *m, const Point *end, const Point *curr,
-                        Path *path) {
+                        enum direction d, Path **path) {
+  Path p = (Path){*curr, d};
+  arrput(*path, p);
   if (cmp_point(end, curr) == 0) {
     return true;
   }
   for (enum direction d = direction_up; d <= direction_right; d++) {
-    if (true /* TODO: check if there is a wall at that direction */) {
-      Point nextPoint;
-
-      // TODO: set nextPoint to the next point
-
-      if (find_point_in_paths(path, &nextPoint) != -1 &&
-          pathfind_recursive(m, end, &nextPoint, path)) {
+    if (can_move(m, curr, d)) {
+      Point nextPoint = {curr->x, curr->y};
+      move_point(&nextPoint, d);
+      if (find_point_in_paths(*path, &nextPoint) == -1 &&
+          pathfind_recursive(m, end, &nextPoint, d, path)) {
         return true;
       }
     }
   }
+  arrpop(*path);
   return false;
 }
 
 Path *pathfind(const Maze *m, Point start_and_end[2]) {
   Path *path = NULL;
-  pathfind_recursive(m, &start_and_end[1], &start_and_end[0], path);
+  pathfind_recursive(m, &start_and_end[1], &start_and_end[0], direction_none,
+                     &path);
   return path;
 }
 
