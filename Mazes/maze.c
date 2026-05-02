@@ -239,22 +239,23 @@ void draw_maze_display(MazeDisplay *maze, Point start_and_end[2]) {
     }
   }
   wattroff(maze->win, COLOR_PAIR(WALL_COLOR));
-  WINDOW *w = init_cell_window(maze, &maze->current_maze->indicators[0]);
+  WINDOW *w = init_cell_window(maze, &(Point){0, 0});
+  Path *path = pathfind(maze->current_maze, start_and_end);
+  for (int i = 0; i < arrlen(path); i++) {
+    move_cell_window(maze, w, &path[i].p);
+    draw_circle(w, ARROW_CHAR);
+    // TODO: change to arrows when the arrow code starts working
+  }
+  arrfree(path);
+  path = NULL;
+  move_cell_window(maze, w, &maze->current_maze->indicators[0]);
   wattron(w, COLOR_PAIR(INDICATOR_COLOR));
   draw_circle(w, 'o');
   move_cell_window(maze, w, &maze->current_maze->indicators[1]);
   draw_circle(w, 'o');
   wattroff(w, COLOR_PAIR(INDICATOR_COLOR));
-  // TODO: display the path from the pathfinding algorithm
   delwin(w);
   w = NULL;
-  // code to display pathfinding for debug
-  // Path *p = pathfind(maze->current_maze, (Point[2]){{0, 0}, {3, 3}});
-  // wmove(maze->win, 3, 3);
-  // wprintw(maze->win, "path length: %d\n", arrlen(p));
-  // for (int i = 0; i < arrlen(p); i++) {
-  //   wprintw(maze->win, "(%d, %d), %d\n", p[i].p.x, p[i].p.y, p[i].d);
-  // }
   wnoutrefresh(maze->win);
 }
 
@@ -375,6 +376,7 @@ void draw_triangle(WINDOW *win, char c) {
 }
 
 void draw_arrow(WINDOW *win, enum direction d, char c) {
+  // BUG: drawing a arrow takes longer than pathfinding
   int x, y;
   getmaxyx(win, y, x);
 

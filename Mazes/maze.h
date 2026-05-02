@@ -11,6 +11,8 @@
 
 #define CIRCLE_ERROR 1;
 
+#define ARROW_CHAR '*'
+
 typedef struct _POINT {
   int x;
   int y;
